@@ -1,7 +1,15 @@
 import React from 'react';
 import personService from '../services/persons';
 
-const PersonForm = ({ newName, setNewName, newNumber, setNewNumber, persons, setPersons}) => {
+const PersonForm = ({ 
+  newName, 
+  setNewName, 
+  newNumber, 
+  setNewNumber, 
+  persons, 
+  setPersons,
+  setnotificationMessage
+  }) => {
 
   const updatePerson = person => {
     const id = person.id;
@@ -9,9 +17,16 @@ const PersonForm = ({ newName, setNewName, newNumber, setNewNumber, persons, set
     console.log(person);
     personService
       .update(id, changedPerson).then(returnedPerson => {
+        setnotificationMessage({messageText: `Updated ${returnedPerson.name}'s number`, error: false})
+        setTimeout(() => {
+          setnotificationMessage({messageText: null})
+        }, 3000)
         setPersons(persons.map(p => p.id !== id ? p : returnedPerson));
       }).catch(error => {
-        alert(`The record for ${person.name} no longer exists on the server.`);
+        setnotificationMessage({messageText: `The record for ${person.name} no longer exists on the server.`, error: true})
+        setTimeout(() => {
+          setnotificationMessage({messageText: null})
+        }, 3000)
         setPersons(persons.filter(p => p.id !== id));
       });
   };
@@ -38,6 +53,10 @@ const PersonForm = ({ newName, setNewName, newNumber, setNewNumber, persons, set
         setPersons(persons.concat(returnedPerson));
         setNewName('');
         setNewNumber('');
+        setnotificationMessage({messageText: `Added ${returnedPerson.name}`, error: false})
+        setTimeout(() => {
+          setnotificationMessage({messageText: null})
+        }, 3000)
       });
   };
 
