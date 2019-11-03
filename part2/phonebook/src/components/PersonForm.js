@@ -1,25 +1,45 @@
 import React from 'react';
+import personService from '../services/persons';
 
 const PersonForm = ({ newName, setNewName, newNumber, setNewNumber, persons, setPersons}) => {
 
+  const updatePerson = person => {
+    const id = person.id;
+    const changedPerson = { ...person, number: newNumber }
+    console.log(person);
+    personService
+      .update(id, changedPerson).then(returnedPerson => {
+        setPersons(persons.map(p => p.id !== id ? p : returnedPerson));
+      }).catch(error => {
+        alert(`The record for ${person.name} no longer exists on the server.`);
+        setPersons(persons.filter(p => p.id !== id));
+      });
+  };
+
   const addPerson = (event) => {
     event.preventDefault();
-    const found = persons.filter(person => 
+    const matchedPerson = persons.filter(person => 
       person.name.toLowerCase() === newName.toLowerCase().trim());
 
-    if(found.length){
-      alert(`${newName} is already added to the phonebook`);
-      return false;
+    if(matchedPerson.length){
+      if(window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)){
+        updatePerson(matchedPerson[0]);
+        return true;
+      }
     }
 
     const newPerson = {
       name: newName,
       number: newNumber
     }
-    setPersons(persons.concat(newPerson));
-    setNewName('');
-    setNewNumber('');
-  }
+
+    personService
+      .create(newPerson).then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson));
+        setNewName('');
+        setNewNumber('');
+      });
+  };
 
   const handleNameChange = (event) => {
     setNewName(event.target.value);
