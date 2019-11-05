@@ -10,16 +10,6 @@ morgan.token('data', function (req, res) {
 });
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'));
 
-// const requestLogger = (req, res, next) => {
-//     console.log('Method:', req.method);
-//     console.log('Path:  ', req.path);
-//     console.log('Body:  ', req.body);
-//     console.log('---');
-//     next();
-// };
-
-// app.use(requestLogger);
-
 let persons = [
     {
         "name": "Arto Hellas",
@@ -118,14 +108,6 @@ app.get('/info', (req, res) => {
     const date = new Date();
     res.send(`<p>Phonebook has info for ${total} people</p><p>${date}</p>`)
 });
-
-// const unknownEndpoint = (req, res) => {
-//     res.status(404).send({
-//         error: 'unknown endpoint'
-//     });
-// };
-
-// app.use(unknownEndpoint);
 
 const PORT = 3001;
 app.listen(PORT, () => {
