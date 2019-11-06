@@ -1,0 +1,6 @@
+[submodule "part3/notes-backend"]
+	path = part3/notes-backend
+	url = git@github.com:rapritchard/notes-backend.git
+[submodule "part3/phonebook-backend"]
+	path = part3/phonebook-backend
+	url = git@github.com:rapritchard/phonebook-backend.git
