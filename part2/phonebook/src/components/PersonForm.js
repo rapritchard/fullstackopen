@@ -51,13 +51,21 @@ const PersonForm = ({
     personService
       .create(newPerson).then(returnedPerson => {
         setPersons(persons.concat(returnedPerson));
+        
         setNewName('');
         setNewNumber('');
+
         setnotificationMessage({messageText: `Added ${returnedPerson.name}`, error: false})
         setTimeout(() => {
           setnotificationMessage({messageText: null})
         }, 3000)
-      });
+      })
+      .catch(error => {
+        setnotificationMessage({ messageText: error.response.data.error, error: true})
+        setTimeout(() => {
+          setnotificationMessage({messageText: null})
+        }, 3000)
+      })
   };
 
   const handleNameChange = (event) => {
